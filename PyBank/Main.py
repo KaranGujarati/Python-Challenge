@@ -28,26 +28,29 @@ with open(filepath) as bgt_data:
 
         revenue_diff = int(row["Profit/Losses"]) - previous_rev
         previous_rev = int(row["Profit/Losses"])
+        revenue_changes.append(revenue_diff)
         #print (revenue_diff) 
         
         if (revenue_diff > greatest_incr[1]):
-            greatest_incr = revenue_diff
+            greatest_incr[1] = revenue_diff
             greatest_incr[0] = row["Date"]
 
         if (revenue_diff < greatest_decr[1]):
             greatest_decr[1] = revenue_diff
             greatest_decr[0] = row["Date"]
 
-        revenue_changes.append(int(row["Profit/Losses"]))
         
-    avg_changes= sum(revenue_changes) / len(revenue_changes)
+        
+    avg_changes= sum(revenue_changes[1:]) / (len(revenue_changes[1:]))
     
 
     print("Total Months: " + str(total_months))
     print("Net Total amount: " + str(total_amount))
-    print("Average Change: " + "$" + str(round(sum(revenue_diff) / len(revenue_diff),2)))
-    print("Greatest Increase: " + " ($" +  str(greatest_incr[1]) + ")") 
+    print("Average Change: " + "$" + str(round(avg_changes,2)))
+    print("Greatest Increase: " + " ($" +  str(greatest_incr[1]) + ")")
+    print("Greatest Increase month: " + str(greatest_incr[0])) 
     print("Greatest Decrease: " + " ($" +  str(greatest_decr[1]) + ")")
+    print("Greatest Decrease month: " + str(greatest_decr[0])) 
 
         
 
@@ -58,7 +61,15 @@ with open(output_file, "w") as txt_file:
     txt_file.write("\n")
     txt_file.write("Total Revenue: " + "$" + str(total_amount))
     txt_file.write("\n")
-    txt_file.write("Average Change: " + "$" + str(round(sum(revenue_diff) / len(revenue_diff),2)))
+    txt_file.write("Average Change: " + "$" + str(round(avg_changes,2)))
+    txt_file.write("\n")
+    txt_file.write("Greatest Increase: " + " ($" +  str(greatest_incr[1]) + ")")
+    txt_file.write("\n")
+    txt_file.write("Greatest Increase month: " + str(greatest_incr[0]))
+    txt_file.write("\n")
+    txt_file.write("Greatest Decrease: " + " ($" +  str(greatest_decr[1]) + ")")
+    txt_file.write("\n")
+    txt_file.write("Greatest Decrease month: " + str(greatest_decr[0]))
 
 
 
